@@ -2,6 +2,8 @@ import React from 'react';
 import './App.scss';
 import { NodeCollectionStore, NodeStore, StaticTextNodeStore, StoreType, VideoNodeStore } from './stores';
 import { FormattableTextNodeStore } from "./stores/FormattableTextNodeStore";
+import { ImageNodeStore } from "./stores/ImageNodeStore";
+import { WebNodeStore } from "./stores/WebNodeStore";
 import { FreeFormCanvas } from './views/freeformcanvas/FreeFormCanvas';
 import 'react-quill/dist/quill.snow.css';
 
@@ -26,8 +28,19 @@ for (let i = 0; i < numNodes / 3; i++) {
 
 // add 100 formattable text nodes
 for (let i = 0; i < numNodes / 3; i++) {
-    nodes.push(new FormattableTextNodeStore({ type: StoreType.FormattableText, x: Math.random() * maxX, y: Math.random() * maxY, text: "yasss" }));
+    nodes.push(new FormattableTextNodeStore({ type: StoreType.FormattableText, x: Math.random() * maxX, y: Math.random() * maxY, text: "<h1>Formattable Title</h1><p>Sample Text. Click the node and use the toolbar + your arrow keys to edit me!</p>" }));
 }
+
+// add 100 image nodes
+for (let i = 0; i < 100; i++) {
+    nodes.push(new ImageNodeStore({ type: StoreType.Image, x: Math.random() * maxX, y: Math.random() * maxY, title: "Image Node Title", imageUrl: "https://is3-ssl.mzstatic.com/image/thumb/Music115/v4/15/38/9b/15389bf4-8074-06c3-11ee-655b5453af68/21UM1IM25046.rgb.jpg/256x256bb.jpg"}));
+}
+
+// add 10 web nodes
+for (let i = 0; i < 10; i++) {
+    nodes.push(new WebNodeStore({ type: StoreType.Web, x: Math.random() * maxX, y: Math.random() * maxY, title: "Web Node Title", url: "https://512kb.club/"}));
+}
+
 
 
 // add set of 300 nodes to node collection

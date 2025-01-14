@@ -4,7 +4,9 @@ import { Utils } from "../Utils";
 export enum StoreType {
     Text, 
     Video,
-    FormattableText
+    FormattableText,
+    Image,
+    Web
 }
 
 export class NodeStore {
@@ -20,25 +22,14 @@ export class NodeStore {
     public y: number = 0;
 
     @observable
-    public width: number = 300;
+    public width: number = 300; // default width (pixels)
 
     @observable
-    public height: number = 300;
+    public height: number = 300; // default height (pixels)
 
     @computed
     public get transform(): string {
         return "translate(" + this.x + "px, " + this.y + "px)";
     }
 
-    @action
-    setDimensions(newWidth: number, newHeight: number) {
-        this.width = Math.max(newWidth, 50);
-        this.height = Math.max(newHeight, 50);
-    }
-
-    @action
-    setPosition(newX: number, newY: number) {
-        this.x = newX;
-        this.y = newY;
-    }
 }

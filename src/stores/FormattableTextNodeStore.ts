@@ -1,8 +1,7 @@
 import { observable, action } from "mobx";
 import { NodeStore } from "./NodeStore";
-import { EditorState } from "draft-js";
-declare module 'draft-js';
 
+// Store for text nodes that are not static (are formattable)
 export class FormattableTextNodeStore extends NodeStore {
     
     @observable

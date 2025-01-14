@@ -1,0 +1,20 @@
+.node {
+
+    &.webNode {
+        background: antiquewhite;
+        position: relative;
+
+        .content {
+            width: 100%;
+            height: 100%;
+        }
+        // making sure the content takes up the entire space possible in the node
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: 0px;
+        }
+        // iframe should take up entire space available and have no border
+    }
+}

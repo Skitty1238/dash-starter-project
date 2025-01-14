@@ -2,7 +2,11 @@ import { observer } from "mobx-react";
 import * as React from 'react';
 import { NodeCollectionStore, NodeStore, StaticTextNodeStore, StoreType, VideoNodeStore } from "../../stores";
 import { FormattableTextNodeStore } from "../../stores/FormattableTextNodeStore";
-import {FormattableTextNodeView} from "../nodes/FormattableTextNodeView";
+import { FormattableTextNodeView } from "../nodes/FormattableTextNodeView";
+import { ImageNodeStore } from "../../stores/ImageNodeStore";
+import { ImageNodeView } from "../nodes/ImageNodeView";
+import { WebNodeStore } from "../../stores/WebNodeStore";
+import { WebNodeView } from "../nodes/WebNodeView";
 import { TextNodeView, VideoNodeView} from "../nodes";
 import "./FreeFormCanvas.scss";
 
@@ -57,8 +61,16 @@ export class FreeFormCanvas extends React.Component<FreeFormProps> {
                                 case StoreType.Video:
                                     return (<VideoNodeView key={nodeStore.Id} store={nodeStore as VideoNodeStore}/>)
 
+                                // same format followed below for each new node types I created (Formattable Text, Image, Web)
+
                                 case StoreType.FormattableText:
                                     return (<FormattableTextNodeView key={nodeStore.Id} store={nodeStore as FormattableTextNodeStore}/>);
+
+                                case StoreType.Image:
+                                    return (<ImageNodeView key={nodeStore.Id} store={nodeStore as ImageNodeStore}/>)
+
+                                case StoreType.Web:
+                                    return (<WebNodeView key={nodeStore.Id} store={nodeStore as WebNodeStore}/>)
 
                                 default:
                                     return (null);
