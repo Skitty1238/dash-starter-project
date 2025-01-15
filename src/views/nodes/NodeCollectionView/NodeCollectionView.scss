@@ -1,0 +1,22 @@
+.node {
+
+    &.collectionNode {
+        background: rgba(0, 0, 0, 0.7); 
+        // transparent effect to indicate this isn't really a "normal" node,
+        // instead more like a new canvas
+      
+        position: absolute;
+
+        .content {
+            width: 100%;
+            height: 100%;
+            // ensures the content takes up the max possible space in the node
+
+            .collection-title {
+                color: white;
+            }
+            
+
+        }
+    }
+}

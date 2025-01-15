@@ -8,12 +8,22 @@ export class NodeCollectionStore extends NodeStore {
 
     @computed
     public get transform(): string {
-        return "translate(" + this.x + "px," + this.y + "px)"; // for CSS trnsform property
+        return "translate(" + this.x + "px," + this.y + "px)"; // for CSS transform property
     }
 
     @action
     public addNodes(stores: NodeStore[]): void {
-        this.nodes.push(...stores); // This is equivalent to: stores.forEach(store => this.nodes.push(store));
-
+        stores.forEach(store => {
+            store.parent = this;
+            this.nodes.push(store);
+        })
     }
+
+    // functionality to remove a node from a collection
+    @action
+    removeNode(node: NodeStore) {
+        this.nodes = this.nodes.filter(n => n !== node);
+        node.parent = null;
+    }
+
 }

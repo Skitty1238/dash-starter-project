@@ -6,6 +6,7 @@ import { ImageNodeStore } from "./stores/ImageNodeStore";
 import { WebNodeStore } from "./stores/WebNodeStore";
 import { FreeFormCanvas } from './views/freeformcanvas/FreeFormCanvas';
 import 'react-quill/dist/quill.snow.css';
+import Sidebar from "./Sidebar";
 
 
 const mainNodeCollection = new NodeCollectionStore();
@@ -41,16 +42,58 @@ for (let i = 0; i < 10; i++) {
     nodes.push(new WebNodeStore({ type: StoreType.Web, x: Math.random() * maxX, y: Math.random() * maxY, title: "Web Node Title", url: "https://512kb.club/"}));
 }
 
-
-
-// add set of 300 nodes to node collection
+// add set of nodes to node collection
 mainNodeCollection.addNodes(nodes);
 
+// node collection:
+
+// Create a collection node
+const collectionNode = new NodeCollectionStore();
+collectionNode.type = StoreType.Collection
+collectionNode.x = 500; // Set initial position
+collectionNode.y = 500;
+collectionNode.width = 800;
+collectionNode.height = 800;
+collectionNode.title = "Collection";
+
+const nestedCollectionNode = new NodeCollectionStore();
+nestedCollectionNode.type = StoreType.Collection;
+nestedCollectionNode.x = 200;
+nestedCollectionNode.y = 200;
+nestedCollectionNode.title = "Nested Collection";
+nestedCollectionNode.addNodes([new StaticTextNodeStore({ type: StoreType.Text, title:"Nested Title", text:"nested text"})])
+
+// Add various nodes to this collection node
+collectionNode.addNodes([
+    new StaticTextNodeStore({ type: StoreType.Text, x: 20, y: 20, title: "Inner Text Node", text: "Inner text node within a collection." }),
+    new VideoNodeStore({ type: StoreType.Video, x: 100, y: 50, title: "Inner Video Node", url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" }),
+    nestedCollectionNode
+]);
+
+// Add the collection node to the main node collection
+mainNodeCollection.addNodes([collectionNode]);
+
 export class App extends React.Component {
+
+    moveNode = (node: NodeStore, newParent: NodeCollectionStore) => {
+        if (node.parent) {
+            // Remove the node from its current parent
+            const parentIndex = node.parent.nodes.findIndex(n => n === node);
+            if (parentIndex !== -1) {
+                node.parent.nodes.splice(parentIndex, 1);
+            }
+        }
+
+        // Add to the new parent
+        newParent.addNodes([node]);
+        node.parent = newParent;  // Ensure the node's parent reference is updated
+    }
+
     render() {
         return (
             <div className="App">
-            <FreeFormCanvas store={mainNodeCollection} /> 
+            <FreeFormCanvas store={mainNodeCollection}/> 
+            <Sidebar store={mainNodeCollection} />
             </div>
         );
     }

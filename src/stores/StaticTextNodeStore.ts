@@ -22,8 +22,5 @@ export class StaticTextNodeStore extends NodeStore {
     }
 
     @observable
-    public title: string = "";
-
-    @observable
     public text: string = "";
 }

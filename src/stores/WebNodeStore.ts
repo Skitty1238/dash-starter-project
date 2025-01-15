@@ -13,7 +13,4 @@ export class WebNodeStore extends NodeStore {
     public url: string = "";
     // stores the website url
 
-    @observable
-    public title: string | undefined;
-
 }

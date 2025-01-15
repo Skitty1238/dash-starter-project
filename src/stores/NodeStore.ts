@@ -1,12 +1,14 @@
 import { computed, observable, action } from "mobx";
 import { Utils } from "../Utils";
+import { NodeCollectionStore } from "./NodeCollectionStore";
 
 export enum StoreType {
     Text, 
     Video,
     FormattableText,
     Image,
-    Web
+    Web,
+    Collection
 }
 
 export class NodeStore {
@@ -14,6 +16,9 @@ export class NodeStore {
     public Id: string = Utils.GenerateGuid();
 
     public type: StoreType | null = null;
+
+    @observable
+    public title: string = "";
 
     @observable
     public x: number = 0;
@@ -31,5 +36,8 @@ export class NodeStore {
     public get transform(): string {
         return "translate(" + this.x + "px, " + this.y + "px)";
     }
+
+    @observable 
+    public parent: NodeCollectionStore | null = null;
 
 }

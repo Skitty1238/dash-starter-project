@@ -10,10 +10,6 @@ export class ImageNodeStore extends NodeStore {
     }
 
     @observable
-    public title: string | undefined;
-    // stores node title
-
-    @observable
     public imageUrl: string | undefined;
     // stores image url
 

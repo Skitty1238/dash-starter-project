@@ -7,6 +7,7 @@ import { ImageNodeStore } from "../../stores/ImageNodeStore";
 import { ImageNodeView } from "../nodes/ImageNodeView";
 import { WebNodeStore } from "../../stores/WebNodeStore";
 import { WebNodeView } from "../nodes/WebNodeView";
+import { NodeCollectionView } from "../nodes/NodeCollectionView";
 import { TextNodeView, VideoNodeView} from "../nodes";
 import "./FreeFormCanvas.scss";
 
@@ -20,13 +21,15 @@ export class FreeFormCanvas extends React.Component<FreeFormProps> {
     private isPointerDown: boolean | undefined;
 
     onPointerDown = (e: React.PointerEvent): void => {
-        e.stopPropagation();
-        e.preventDefault();
-        this.isPointerDown = true;
-        document.removeEventListener("pointermove", this.onPointerMove);
-        document.addEventListener("pointermove", this.onPointerMove);
-        document.removeEventListener("pointerup", this.onPointerUp);
-        document.addEventListener("pointerup", this.onPointerUp);
+        if (e.target === e.currentTarget) {
+            e.stopPropagation();
+            e.preventDefault();
+            this.isPointerDown = true;
+            document.removeEventListener("pointermove", this.onPointerMove);
+            document.addEventListener("pointermove", this.onPointerMove);
+            document.removeEventListener("pointerup", this.onPointerUp);
+            document.addEventListener("pointerup", this.onPointerUp);
+        }
     }
 
     onPointerUp = (e: PointerEvent): void => {
@@ -61,7 +64,7 @@ export class FreeFormCanvas extends React.Component<FreeFormProps> {
                                 case StoreType.Video:
                                     return (<VideoNodeView key={nodeStore.Id} store={nodeStore as VideoNodeStore}/>)
 
-                                // same format followed below for each new node types I created (Formattable Text, Image, Web)
+                                // same format followed below for each new node type created (Formattable Text, Image, Web)
 
                                 case StoreType.FormattableText:
                                     return (<FormattableTextNodeView key={nodeStore.Id} store={nodeStore as FormattableTextNodeStore}/>);
@@ -71,6 +74,9 @@ export class FreeFormCanvas extends React.Component<FreeFormProps> {
 
                                 case StoreType.Web:
                                     return (<WebNodeView key={nodeStore.Id} store={nodeStore as WebNodeStore}/>)
+                                
+                                case StoreType.Collection:
+                                    return (<NodeCollectionView key={nodeStore.Id} store={nodeStore as NodeCollectionStore}/>)
 
                                 default:
                                     return (null);

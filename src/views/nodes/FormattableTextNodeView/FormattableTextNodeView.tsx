@@ -27,12 +27,12 @@ export class FormattableTextNodeView extends React.Component<FormattableTextNode
     }
     
     // updates text stored in the node given new text input
-    handleNewText = (text: string) => {
+    private handleNewText = (text: string) => {
         this.props.store.text = text;
     };
 
     // puts focus on the quill editor (i.e. cursor will become active)
-    focusEditor = () => {
+    private focusEditor = () => {
         if (this.quillRef.current && !this.quillRef.current.getEditor().hasFocus()) {
             this.quillRef.current.getEditor().focus();
         }
