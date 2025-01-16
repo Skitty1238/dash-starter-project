@@ -17,7 +17,6 @@ interface FreeFormProps {
 
 @observer
 export class FreeFormCanvas extends React.Component<FreeFormProps> {
-
     private isPointerDown: boolean | undefined;
 
     onPointerDown = (e: React.PointerEvent): void => {
@@ -52,7 +51,8 @@ export class FreeFormCanvas extends React.Component<FreeFormProps> {
     render() {
         let store = this.props.store;
         return (
-            <div className="freeformcanvas-container" onPointerDown={this.onPointerDown}>
+            <div className="freeformcanvas-container" onPointerDown={this.onPointerDown}
+>
                 <div className="freeformcanvas" style={{ transform: store.transform }}>
                     {   
                         // maps each item in the store to be rendered in the canvas based on the node type

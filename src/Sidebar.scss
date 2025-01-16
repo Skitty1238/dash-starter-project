@@ -1,32 +1,40 @@
-/* Sidebar.scss */
-
 .sidebar {
     width: 250px;
-    background-color: #f1eded;
+    background-color: rgb(239, 230, 221);
     height: 100vh;
     overflow-y: auto;
     position: fixed;
     left: 0;
     top: 0;
     border-right: 1px solid #b9b6b6;
-    padding: 20px;       
+    padding-left: 20px;
+    padding-bottom: 20px;       
     box-sizing: border-box;
     resize: horizontal;
 
     .title {
         position: sticky;
         top: 0;
-        background-color: #f1eded;
+        background-color: rgb(239, 230, 221);
         width: 100%;
         border-bottom: 1px solid #b9b6b6;
+        padding-top: 10px;
+        color: rgb(23, 22, 20);
+        
     }
     
 }
 
 .node-item {
     padding: 10px 0;
+    width: 70%;
     cursor: pointer;
+
     &:hover {
-        background-color: #e0e0e0;
+        background-color: rgb(248, 245, 241); // default hover for all non-collection nodes
+    }
+
+    &.node-item-collection:hover {
+        background-color: #c7c2be73; // specific hover for collection nodes
     }
 }

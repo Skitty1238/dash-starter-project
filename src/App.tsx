@@ -6,7 +6,7 @@ import { ImageNodeStore } from "./stores/ImageNodeStore";
 import { WebNodeStore } from "./stores/WebNodeStore";
 import { FreeFormCanvas } from './views/freeformcanvas/FreeFormCanvas';
 import 'react-quill/dist/quill.snow.css';
-import Sidebar from "./Sidebar";
+import { Sidebar } from "./Sidebar";
 
 
 const mainNodeCollection = new NodeCollectionStore();
@@ -75,25 +75,52 @@ mainNodeCollection.addNodes([collectionNode]);
 
 export class App extends React.Component {
 
-    moveNode = (node: NodeStore, newParent: NodeCollectionStore) => {
-        if (node.parent) {
-            // Remove the node from its current parent
-            const parentIndex = node.parent.nodes.findIndex(n => n === node);
-            if (parentIndex !== -1) {
-                node.parent.nodes.splice(parentIndex, 1);
-            }
-        }
+    // function handling moving nodes to/from/between collections (in the sidebar)
+    onMoveNode = (nodeId: string, newParentId?: string) => {
 
-        // Add to the new parent
-        newParent.addNodes([node]);
-        node.parent = newParent;  // Ensure the node's parent reference is updated
+        // find current node and its parent
+        const nodeToMove = mainNodeCollection.findNodeById(nodeId);
+        const newParentNode = newParentId ? mainNodeCollection.findNodeById(newParentId) as NodeCollectionStore : mainNodeCollection;
+
+        if (nodeId === newParentId) {
+            return; // prevent moving the node to itself (was exhibiting weird behaviour)
+        }
+    
+        if (nodeToMove && newParentNode && nodeToMove.parent !== newParentNode) { 
+
+            // remove node from its current parent collection 
+            // (unless its parent is the main collection, in which case
+            // nodeToMove.parent is null)
+            if (nodeToMove.parent) {
+                nodeToMove.parent.removeNode(nodeToMove);
+            }
+
+            // add the node to the new parent collection
+            newParentNode.addNodes([nodeToMove]);
+            nodeToMove.parent = newParentNode;
+
+            // move the node to the center of the collection node it has been added to, 
+            // so that it is instantly visible 
+            if (newParentNode !== mainNodeCollection) {
+                nodeToMove.x = (newParentNode.width / 2) - (nodeToMove.width / 2);
+                nodeToMove.y = (newParentNode.height / 2) - (nodeToMove.height / 2);
+            }
+            
+        } else if (nodeToMove && !newParentNode && nodeToMove.parent !== newParentNode) { 
+            // handles moving node into the main collection
+            if (nodeToMove.parent) {
+                nodeToMove.parent.removeNode(nodeToMove);
+            }
+
+            mainNodeCollection.addNodes([nodeToMove]);
+        }
     }
 
     render() {
         return (
             <div className="App">
             <FreeFormCanvas store={mainNodeCollection}/> 
-            <Sidebar store={mainNodeCollection} />
+            <Sidebar store={mainNodeCollection} onMoveNode={this.onMoveNode}/>
             </div>
         );
     }
