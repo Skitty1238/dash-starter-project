@@ -20,25 +20,29 @@ interface NodeCollectionProps {
     store: NodeCollectionStore;
 }
 
+/**
+ * A class representing the frontend of a Collection Node
+ */
+
 @observer
 export class NodeCollectionView extends React.Component<NodeCollectionProps> {
 
-    moveNode(node: NodeStore, newParent: NodeCollectionStore) {
-        node.parent?.removeNode(node);  // Remove from current parent
-        newParent.addNodes([node]);     // Add to new parent
-    }
-
+    // represent initial position of pointer
     private initialX = 0; 
     private initialY = 0;
 
-    // Panning (within the collection node itself)
+    /**
+     * Method handling mouse clicks (pointer down) on the interior of a Collection Node
+     * Allows for panning (within the collection node itself)
+     * @param e -- the event of a mouse click within a Collection Node
+     */
     private pointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
         e.preventDefault(); 
         e.stopPropagation(); 
         // this prevents double-panning for collections within collections (nested collections)             
        
         const elt = e.currentTarget;
-        // initial x and y positions
+        // initialize x and y positions of pointer
         this.initialX = e.clientX; 
         this.initialY = e.clientY;
 
@@ -71,7 +75,13 @@ export class NodeCollectionView extends React.Component<NodeCollectionProps> {
         e.stopPropagation();
     }
 
-    renderNode = (nodeStore: NodeStore) => {
+    /**
+     * Renders the differrent types of nodes that may be within a collection node (i.e. its children)
+     * @param nodeStore -- represents the type of node being rendered, in terms of its "store"
+     * @returns -- a node of the relevant type (Text, Video, Formattable Text, Image, Web, or Collection)
+     */
+
+    private renderNode = (nodeStore: NodeStore) => {
         switch (nodeStore.type) {
             case StoreType.Text:
                 return <TextNodeView key={nodeStore.Id} store={nodeStore as StaticTextNodeStore} />;
@@ -90,8 +100,12 @@ export class NodeCollectionView extends React.Component<NodeCollectionProps> {
         }
     }
 
+    /**
+     * Renders the Collection Node frontend
+     * @returns -- an HTML div element representing the Collection Node 
+     */
 
-    render() {
+    public render() {
         let store = this.props.store;
 
         return (
@@ -104,8 +118,8 @@ export class NodeCollectionView extends React.Component<NodeCollectionProps> {
                 <div className="scroll-box">
                     <div className="content">
                         <h3 className="collection-title">{store.title}</h3>
-                        {store.nodes.map(this.renderNode)}
-                    </div>
+                        {store.nodes.map(this.renderNode)} {/** adds child nodes to the collection node */}
+                    </div> 
                 </div>
                 <ResizeBox store={store}/>
             </div>

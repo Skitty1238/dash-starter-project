@@ -1,6 +1,11 @@
 import { observable } from "mobx";
 import { NodeStore } from "./NodeStore";
 
+/**
+ * A class containing the data for a Static Text Node
+ * 
+ */
+
 export class StaticTextNodeStore extends NodeStore {
 
     constructor(initializer: Partial<StaticTextNodeStore>) {

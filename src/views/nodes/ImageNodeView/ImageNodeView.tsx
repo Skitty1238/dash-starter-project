@@ -10,10 +10,17 @@ interface ImageNodeProps {
     store: ImageNodeStore;
 }
 
+/**
+ * A class representing the Image Node frontend
+ */
+
 @observer
 export class ImageNodeView extends React.Component<ImageNodeProps> {
-
-    render() {
+    /**
+     * Renders the Image Node
+     * @returns -- an HTML div element representing an Image Node
+     */
+    public render() {
         let store = this.props.store;
 
         return (

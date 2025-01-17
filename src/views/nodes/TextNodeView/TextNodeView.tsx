@@ -12,10 +12,19 @@ interface TextNodeProps {
     store: StaticTextNodeStore;
 }
 
+/**
+ * A class representing the (Static) Text Node frontend
+ */
+
 @observer
 export class TextNodeView extends React.Component<TextNodeProps> {
 
-    render() {
+    /**
+     * Renders the frontend of the Text Node
+     * @returns -- HTML div elemetn representing the Static Text Node
+     */
+
+    public render() {
         let store = this.props.store;
 
         return (
@@ -35,6 +44,7 @@ export class TextNodeView extends React.Component<TextNodeProps> {
                         </div>
                     </div>
                     <ResizeBox store={store}/>
+                    
                 </div>
         );
     }

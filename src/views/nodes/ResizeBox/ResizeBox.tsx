@@ -7,7 +7,9 @@ interface ResizeBoxProps {
     store: NodeStore;
 }
 
-// Box that allows for resize functionality of corresponding node
+/**
+ * A class representing a reize box that allows for resize functionality of corresponding node
+ */
 
 @observer
 export class ResizeBox extends React.Component<ResizeBoxProps> {
@@ -15,8 +17,11 @@ export class ResizeBox extends React.Component<ResizeBoxProps> {
     private initialPos = { x: 0, y: 0 };
     private initialSize = { width: 0, height: 0 };
 
-    // when resize box is clicked
-    onPointerDown = (e: React.PointerEvent): void => {
+    /**
+     * Method handling event where mouse is clicked on the resize box
+     * @param e -- event where mouse is clicked on the resize box
+     */
+    private pointerDown = (e: React.PointerEvent): void => {
         e.stopPropagation();
         e.preventDefault();
         this.isResizing = true;
@@ -27,12 +32,16 @@ export class ResizeBox extends React.Component<ResizeBoxProps> {
         }; // stores initial size of the node (as soon as click takes place)
 
         // deals with events of click-and-drag (pointer move), or the click ending (pointer up)
-        document.addEventListener("pointermove", this.onPointerMove);
-        document.addEventListener("pointerup", this.onPointerUp);
+        document.addEventListener("pointermove", this.pointerMove);
+        document.addEventListener("pointerup", this.pointerUp);
     };
 
-    // when resize box is clicked and dragged
-    onPointerMove = (e: PointerEvent) => {
+    /**
+     * Method handling event where mouse is clicked on resize box and dragged 
+     * @param e -- event where mouse is clicked and dragged
+     * @returns -- if the resizing ceases (i.e. when click is released)
+     */
+    private pointerMove = (e: PointerEvent) => {
         e.stopPropagation();
         e.preventDefault();
         if (!this.isResizing) return; 
@@ -53,22 +62,30 @@ export class ResizeBox extends React.Component<ResizeBoxProps> {
         this.props.store.height = newHeight;
     };
 
-    // when click ends (or the pointer is up)
-    onPointerUp = (e: PointerEvent) => {
+    /**
+     * Method handling when click is released from resize box
+     * @param e -- event of mouse click being released from resize box
+     */
+
+    private pointerUp = (e: PointerEvent) => {
         e.stopPropagation();
         e.preventDefault();
         this.isResizing = false;
 
         // event listeners removed to prevent further changes in size
-        document.removeEventListener("pointermove", this.onPointerMove);
-        document.removeEventListener("pointerup", this.onPointerUp);
+        document.removeEventListener("pointermove", this.pointerMove);
+        document.removeEventListener("pointerup", this.pointerUp);
     };
 
-    render() {
+    /**
+     * Method that renders the resize box
+     * @returns -- an HTML div element representing the resize box
+     */
+    public render() {
         return (
             <div
                 className="resize-box"
-                onPointerDown={this.onPointerDown}
+                onPointerDown={this.pointerDown}
             />
         );
     }

@@ -1,9 +1,15 @@
 import { action, observable } from "mobx";
 import { NodeStore } from "./NodeStore";
 
-// store for the Web Nodes
+/**
+ * A class that contains the data of a Website Node
+ */
 export class WebNodeStore extends NodeStore {
 
+    /**
+     * Constructor for WebNodeStore
+     * @param initializer -- object to initialize as a Web Node
+     */
     constructor(initializer: Partial<WebNodeStore>) {
         super();
         Object.assign(this, initializer);

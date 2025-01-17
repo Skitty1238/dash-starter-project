@@ -15,11 +15,19 @@ interface FreeFormProps {
     store: NodeCollectionStore
 }
 
+/**
+ * A class representing the freeform canvas (main canvas on which nodes are added)
+ */
 @observer
 export class FreeFormCanvas extends React.Component<FreeFormProps> {
     private isPointerDown: boolean | undefined;
 
-    onPointerDown = (e: React.PointerEvent): void => {
+    /**
+     * Handles pointer down events on the main freeform canvas 
+     * @param e -- the pointer event triggered when mouse is pressed down on the canvas
+     */
+
+    private onPointerDown = (e: React.PointerEvent): void => {
         if (e.target === e.currentTarget) {
             e.stopPropagation();
             e.preventDefault();
@@ -31,7 +39,12 @@ export class FreeFormCanvas extends React.Component<FreeFormProps> {
         }
     }
 
-    onPointerUp = (e: PointerEvent): void => {
+    /**
+     * Handles pointer up events on the main freeform canvas 
+     * @param e -- the pointer event triggered when mouse click is released
+     */
+
+    private onPointerUp = (e: PointerEvent): void => {
         e.stopPropagation();
         e.preventDefault();
         this.isPointerDown = false;
@@ -39,7 +52,14 @@ export class FreeFormCanvas extends React.Component<FreeFormProps> {
         document.removeEventListener("pointerup", this.onPointerUp);
     }
 
-    onPointerMove = (e: PointerEvent): void => {
+    /**
+     * Handles pointer movement events on the main freeform canvas, 
+     * allowing dragging the canvas (panning ability)
+     * @param e -- the pointer event triggered when the clicked mouse is moved
+     * @returns -- returns if pointer is not down
+     */
+
+    private onPointerMove = (e: PointerEvent): void => {
         e.stopPropagation();
         e.preventDefault();
         if (!this.isPointerDown) return;
@@ -48,7 +68,12 @@ export class FreeFormCanvas extends React.Component<FreeFormProps> {
         this.props.store.y += e.movementY;
     }
 
-    render() {
+    /**
+     * Renders the canvas and alls the nodes that populate it (i.e. its "children")
+     * @returns a freeform canvas HTML div element 
+     */
+
+    public render() {
         let store = this.props.store;
         return (
             <div className="freeformcanvas-container" onPointerDown={this.onPointerDown}

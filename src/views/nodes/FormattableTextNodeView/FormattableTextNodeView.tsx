@@ -15,30 +15,48 @@ interface FormattableTextNodeProps {
     store: FormattableTextNodeStore;
 }
 
+/**
+ * A class representing the Formattable Text Node frontend
+ */
+
 @observer
 export class FormattableTextNodeView extends React.Component<FormattableTextNodeProps> {
 
     // reference to the quill text-editor object 
     private quillRef: React.RefObject<ReactQuill>;
 
+    /**
+     * Constructor for a Formattable Text Node 
+     * @param props -- the props passed down to the node
+     */
     constructor(props: FormattableTextNodeProps) {
         super(props);
         this.quillRef = React.createRef<ReactQuill>();
     }
     
-    // updates text stored in the node given new text input
-    private handleNewText = (text: string) => {
+    /**
+     * Updates text stored in the node given new text input
+     * @param text -- the input text
+     */
+    private newText = (text: string) => {
         this.props.store.text = text;
     };
 
-    // puts focus on the quill editor (i.e. cursor will become active)
+    // 
+    /**
+     * Puts focus on the quill editor (i.e. cursor will become active)
+     */
     private focusEditor = () => {
         if (this.quillRef.current && !this.quillRef.current.getEditor().hasFocus()) {
             this.quillRef.current.getEditor().focus();
         }
     }
 
-    render() {
+    /**
+     * Renders the Formattable Text Node. Uses React-Quill
+     * @returns -- an HTML div element representing the Formattable Text Node
+     */
+    public render() {
         let { store } = this.props;
 
         // customize functionality of the text editor
@@ -65,13 +83,13 @@ export class FormattableTextNodeView extends React.Component<FormattableTextNode
                 transform: store.transform,
                 width: `${store.width}px`,
                 height: `${store.height}px`
-            }} onClick={this.focusEditor}> {/* puts the respective quill text editor into focus when the corresponding node is clicked*/}
+            }} onClick={this.focusEditor}> {/* puts the respective quill text editor into "focus" when the corresponding node is clicked*/}
                 <TopBar store={store}/>
                 <div className="scroll-box">
                     <ReactQuill
                         ref={this.quillRef} // stores reference to current editor
                         value={store.text} // stores the text 
-                        onChange={this.handleNewText} // updates the text upon changes
+                        onChange={this.newText} // updates the text upon changes
                         modules={modules}
                         formats={formats}
                     />

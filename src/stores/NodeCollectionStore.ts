@@ -1,7 +1,13 @@
 import { computed, observable, action } from "mobx";
-import { NodeStore } from "./NodeStore";
+import { NodeStore, StoreType } from "./NodeStore";
+
 
 export class NodeCollectionStore extends NodeStore {
+
+    constructor(initializer: Partial<NodeCollectionStore>) {
+        super();
+        Object.assign(this, initializer);
+    }
 
     @observable
     public nodes: NodeStore[] = new Array<NodeStore>();
@@ -22,13 +28,14 @@ export class NodeCollectionStore extends NodeStore {
 
     // functionality to remove a node from a collection
     @action
-    removeNode(node: NodeStore) {
+    public removeNode(node: NodeStore) {
         this.nodes = this.nodes.filter(n => n !== node); // filters this.nodes to include everything except the node to remove
         node.parent = null;
     }
 
     // breadth first search to return a partciular node (within collections) given its id
-    findNodeById(id: string): NodeStore | undefined {
+    @observable
+    public findNodeById(id: string): NodeStore | undefined {
         let queue: (NodeStore | undefined)[] = [this];
         while (queue.length > 0) {
             const current = queue.shift();
@@ -41,5 +48,9 @@ export class NodeCollectionStore extends NodeStore {
         }
         return undefined;
     }
+
+    @observable
+    public isModalOpen = false;
+
 
 }

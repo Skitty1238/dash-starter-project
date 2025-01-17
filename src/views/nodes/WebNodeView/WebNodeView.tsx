@@ -10,29 +10,41 @@ interface WebNodeProps {
     store: WebNodeStore;
 }
 
+/**
+ * Class representing frontend of Website Node
+ */
 @observer
 export class WebNodeView extends React.Component<WebNodeProps> {
 
     // the iframe element that is embedded (stored) in the node
     private iframeRef: React.RefObject<HTMLIFrameElement> = React.createRef();
 
-    // function that updates the current iframe element of the node 
-    // to the previous element, if there is one
-    goBack = () => {
+    /**
+     * Function that updates the current iframe element of the node to the 
+     * previous element, if there is one
+     */
+    private goBack = () => {
         if (this.iframeRef.current && this.iframeRef.current.contentWindow) {
             this.iframeRef.current.contentWindow.history.back();
         }
     }
 
-    // function that updates the current iframe element of the node 
-    // to the next element, if there is one
-    goNext = () => {
+    /**
+     * Function that updates the current iframe element of the node to the 
+     * next element, if there is one
+     */
+    private goNext = () => {
         if (this.iframeRef.current && this.iframeRef.current.contentWindow) {
             this.iframeRef.current.contentWindow.history.forward();
         }
     }
 
-    render() {
+    /**
+     * Renders the Web Node
+     * @returns -- HTML div element representing a Web Node
+     */
+
+    public render() {
         let { store } = this.props;
 
         return (
@@ -44,7 +56,7 @@ export class WebNodeView extends React.Component<WebNodeProps> {
                 <TopBar store={store}/>
                 <div className="scroll-box">
                     <div className="nav">
-                        {/* buttons to activate the forward/backward navigation */}
+                        {/* buttons to allow the forward/backward navigation */}
                         <button onClick={this.goBack}> &larr; </button>
                         <button onClick={this.goNext}> &rarr; </button>
                     </div>

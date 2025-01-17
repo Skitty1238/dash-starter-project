@@ -10,8 +10,17 @@ interface VideoNodeProps {
     store: VideoNodeStore;
 }
 
+/**
+ * Class representing frontend of Video Node
+ */
+
 @observer
 export class VideoNodeView extends React.Component<VideoNodeProps> {
+    
+    /**
+     * Renders a Video Node
+     * @returns -- HTML div element representing a Video Node
+     */
 
     render() {
         let store = this.props.store;

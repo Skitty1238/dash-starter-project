@@ -11,6 +11,9 @@ export enum StoreType {
     Collection
 }
 
+/**
+ * A class containing data that all nodes must have
+ */
 export class NodeStore {
 
     public Id: string = Utils.GenerateGuid();
@@ -27,10 +30,10 @@ export class NodeStore {
     public y: number = 0;
 
     @observable
-    public width: number = 300; // default width (pixels)
+    public width: number = 300; // default width
 
     @observable
-    public height: number = 300; // default height (pixels)
+    public height: number = 300; // default height
 
     @computed
     public get transform(): string {
@@ -39,5 +42,6 @@ export class NodeStore {
 
     @observable 
     public parent: NodeCollectionStore | null = null;
+    // represents the collection under which the node lies
 
 }
