@@ -1,0 +1,10 @@
+.connection-window {
+    position: relative;
+    left: 0;
+    top: 0;
+    background-color: white;
+    padding: 5px;
+    width: 150px; // Adjust size as needed
+    transform: translateX(-100%); // Position to the right of the node
+    overflow: hidden;
+}

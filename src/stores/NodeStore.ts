@@ -44,4 +44,19 @@ export class NodeStore {
     public parent: NodeCollectionStore | null = null;
     // represents the collection under which the node lies
 
+    @observable public connections: NodeStore[] = [];
+
+    @action addConnection(node: NodeStore) { 
+        if (!this.connections.includes(node)) {
+            this.connections.push(node);
+        }
+    }
+
+    @action removeConnection(removeNode: NodeStore) {
+        this.connections = this.connections.filter(n => n.Id !== removeNode.Id);
+    }
+
+    @observable public areConnectionsVisible: boolean = false;
+    // represents whether or not node's connection window is open
+
 }

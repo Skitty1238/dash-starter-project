@@ -8,7 +8,11 @@ interface TopBarProps {
     store: NodeStore;
 }
 
-// determines color of top bar based on the type of node it is being added to
+/**
+ * Method that determines color of top bar based on the type of node it is being added to
+ * @param type -- type of the node being rendered
+ * @returns -- a string representing a color for the given node
+ */
 const getColorForNodeType = (type: StoreType | null | undefined) => {
     switch (type) {
       case StoreType.Text:

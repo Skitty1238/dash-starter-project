@@ -1,5 +1,4 @@
 .node {
-
     &.imageNode {
         background: #8ba8c5;
         
@@ -18,6 +17,17 @@
             // (to reasonably deal with very large or very small images)
             // height is adjusted automatically to preserve aspect ratio of original image
 
+            
         }
     }
+}
+
+.connections-button {
+    position: absolute;
+    left: 0px;
+    bottom:0;
+    background: #4d7298;
+    color: white;
+    border: 0px;
+    cursor: pointer;
 }

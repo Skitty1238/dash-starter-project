@@ -9,10 +9,12 @@ import { FormattableTextNodeStore } from "../../../stores/FormattableTextNodeSto
 import { TopBar } from "../TopBar";
 import { ResizeBox } from '../ResizeBox/ResizeBox'; // for resizing node functionality
 import "./FormattableTextNodeView.scss";
-
+import { NodeCollectionStore } from '../../../stores';
+import { ConnectionWindow } from '../ConnectionWindow';
 
 interface FormattableTextNodeProps {
     store: FormattableTextNodeStore;
+    mainStore: NodeCollectionStore;
 }
 
 /**
@@ -57,7 +59,7 @@ export class FormattableTextNodeView extends React.Component<FormattableTextNode
      * @returns -- an HTML div element representing the Formattable Text Node
      */
     public render() {
-        let { store } = this.props;
+        let { store, mainStore } = this.props;
 
         // customize functionality of the text editor
         // the "header" functionality is intended to be equivalent to a title
@@ -79,22 +81,29 @@ export class FormattableTextNodeView extends React.Component<FormattableTextNode
 
 
         return (
-            <div className="node formattableTextNode" style={{ 
+            <div className="node-container" style={{
                 transform: store.transform,
+                position: 'absolute',
                 width: `${store.width}px`,
-                height: `${store.height}px`
-            }} onClick={this.focusEditor}> {/* puts the respective quill text editor into "focus" when the corresponding node is clicked*/}
-                <TopBar store={store}/>
-                <div className="scroll-box">
-                    <ReactQuill
-                        ref={this.quillRef} // stores reference to current editor
-                        value={store.text} // stores the text 
-                        onChange={this.newText} // updates the text upon changes
-                        modules={modules}
-                        formats={formats}
-                    />
+                height: `${store.height + 10}px`}}>
+
+                <div className="node formattableTextNode" style={{ 
+                    width: '100%',
+                    height: '100%'
+                }} onClick={this.focusEditor}> {/* puts the respective quill text editor into "focus" when the corresponding node is clicked*/}
+                    <TopBar store={store}/>
+                    <div className="scroll-box">
+                        <ReactQuill
+                            ref={this.quillRef} // stores reference to current editor
+                            value={store.text} // stores the text 
+                            onChange={this.newText} // updates the text upon changes
+                            modules={modules}
+                            formats={formats}
+                        />
+                    </div>
+                    <ResizeBox store={store}/> {/* box for resizing functionality (click and drag to resize) */}
                 </div>
-                <ResizeBox store={store}/> {/* box for resizing functionality (click and drag to resize) */}
+                <ConnectionWindow store={store} mainStore={mainStore}/>
             </div>
         );
     }

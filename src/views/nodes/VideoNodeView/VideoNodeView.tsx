@@ -1,13 +1,15 @@
 import { observer } from "mobx-react";
 import * as React from 'react';
-import { VideoNodeStore } from "../../../stores";
+import { NodeCollectionStore, VideoNodeStore } from "../../../stores";
 import "./../NodeView.scss";
 import { TopBar } from "./../TopBar";
 import { ResizeBox } from '../ResizeBox/ResizeBox';
 import "./VideoNodeView.scss";
+import { ConnectionWindow } from "../ConnectionWindow";
 
 interface VideoNodeProps {
     store: VideoNodeStore;
+    mainStore: NodeCollectionStore;
 }
 
 /**
@@ -23,21 +25,28 @@ export class VideoNodeView extends React.Component<VideoNodeProps> {
      */
 
     render() {
-        let store = this.props.store;
+        let {store, mainStore} = this.props;
 
         return (
-            <div className="node videoNode" style={{
-                    transform: store.transform,
-                    width: `${store.width}px`,
-                    height: `${store.height}px`}}>
-                <TopBar store={store}/>
-                <div className="scroll-box">
-                    <div className="content">
-                        <h3 className="title">{store.title}</h3>
-                        <video src={store.url} controls />
+            <div className="node-container" style={{
+                transform: store.transform,
+                position: 'absolute',
+                width: `${store.width}px`,
+                height: `${store.height + 10}px`}}>
+                <div className="node videoNode" style={{
+                        width: '100%',
+                        height: '100%'
+                        }}>
+                    <TopBar store={store}/>
+                    <div className="scroll-box">
+                        <div className="content">
+                            <h3 className="title">{store.title}</h3>
+                            <video src={store.url} controls />
+                        </div>
                     </div>
+                    <ResizeBox store={store}/>
                 </div>
-                <ResizeBox store={store}/>
+                <ConnectionWindow store={store} mainStore={mainStore}/>
             </div>
         );
     }

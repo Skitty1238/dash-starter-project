@@ -4,10 +4,13 @@ import { WebNodeStore } from "../../../stores/WebNodeStore";
 import { TopBar } from "../TopBar";
 import { ResizeBox } from '../ResizeBox/ResizeBox';
 import "./WebNodeView.scss";
+import { NodeCollectionStore } from '../../../stores';
+import { ConnectionWindow } from '../ConnectionWindow';
 
 
 interface WebNodeProps {
     store: WebNodeStore;
+    mainStore: NodeCollectionStore;
 }
 
 /**
@@ -45,32 +48,39 @@ export class WebNodeView extends React.Component<WebNodeProps> {
      */
 
     public render() {
-        let { store } = this.props;
+        let { store, mainStore } = this.props;
 
         return (
-            <div className="node webNode" style={{ 
+            <div className="node-container" style={{
                 transform: store.transform,
+                position: 'absolute',
                 width: `${store.width}px`,
-                height: `${store.height}px`
-            }}>
-                <TopBar store={store}/>
-                <div className="scroll-box">
-                    <div className="nav">
-                        {/* buttons to allow the forward/backward navigation */}
-                        <button onClick={this.goBack}> &larr; </button>
-                        <button onClick={this.goNext}> &rarr; </button>
+                height: `${store.height + 10}px`}}
+            >
+                <div className="node webNode" style={{ 
+                    width: '100%',
+                    height: '100%'
+                }}>
+                    <TopBar store={store}/>
+                    <div className="scroll-box">
+                        <div className="nav">
+                            {/* buttons to allow the forward/backward navigation */}
+                            <button onClick={this.goBack}> &larr; </button>
+                            <button onClick={this.goNext}> &rarr; </button>
+                        </div>
+                        <div className="content">
+                            <h3 className="title">{store.title}</h3>
+                            <iframe 
+                            src={store.url} 
+                            title={"Website embedded in node with link: "+store.url} 
+                            allow="autoplay; encrypted-media" 
+                            allowFullScreen>
+                            </iframe> {/* iframe element */}
+                        </div>
                     </div>
-                    <div className="content">
-                        <h3 className="title">{store.title}</h3>
-                        <iframe 
-                        src={store.url} 
-                        title={"Website embedded in node with link: "+store.url} 
-                        allow="autoplay; encrypted-media" 
-                        allowFullScreen>
-                        </iframe> {/* iframe element */}
-                    </div>
+                    <ResizeBox store={store}/>
                 </div>
-                <ResizeBox store={store}/>
+                <ConnectionWindow store={store} mainStore={mainStore}/>
             </div>
         );
     }

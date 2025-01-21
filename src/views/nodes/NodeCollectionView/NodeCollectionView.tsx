@@ -1,4 +1,5 @@
 import { observer } from "mobx-react";
+import { observable } from "mobx";
 import * as React from 'react';
 import { NodeCollectionStore } from "../../../stores/NodeCollectionStore";
 import "./NodeCollectionView.scss";
@@ -14,10 +15,12 @@ import { WebNodeView } from "../../nodes/WebNodeView";
 import { TextNodeView, VideoNodeView} from "../../nodes";
 import { StaticTextNodeStore } from "../../../stores/StaticTextNodeStore";
 import { VideoNodeStore } from "../../../stores/VideoNodeStore";
+import { ConnectionWindow } from "../ConnectionWindow";
 
 
 interface NodeCollectionProps {
     store: NodeCollectionStore;
+    mainStore: NodeCollectionStore;
 }
 
 /**
@@ -82,19 +85,20 @@ export class NodeCollectionView extends React.Component<NodeCollectionProps> {
      */
 
     private renderNode = (nodeStore: NodeStore) => {
+
         switch (nodeStore.type) {
             case StoreType.Text:
-                return <TextNodeView key={nodeStore.Id} store={nodeStore as StaticTextNodeStore} />;
+                return <TextNodeView key={nodeStore.Id} store={nodeStore as StaticTextNodeStore} mainStore={this.props.mainStore}/>;
             case StoreType.Video:
-                return <VideoNodeView key={nodeStore.Id} store={nodeStore as VideoNodeStore} />;
+                return <VideoNodeView key={nodeStore.Id} store={nodeStore as VideoNodeStore} mainStore={this.props.mainStore}/>;
             case StoreType.FormattableText:
-                return <FormattableTextNodeView key={nodeStore.Id} store={nodeStore as FormattableTextNodeStore} />;
+                return <FormattableTextNodeView key={nodeStore.Id} store={nodeStore as FormattableTextNodeStore} mainStore={this.props.mainStore}/>;
             case StoreType.Image:
-                return <ImageNodeView key={nodeStore.Id} store={nodeStore as ImageNodeStore} />;
+                return <ImageNodeView key={nodeStore.Id} store={nodeStore as ImageNodeStore} mainStore={this.props.mainStore} />;
             case StoreType.Web:
-                return <WebNodeView key={nodeStore.Id} store={nodeStore as WebNodeStore} />;
+                return <WebNodeView key={nodeStore.Id} store={nodeStore as WebNodeStore} mainStore={this.props.mainStore}/>;
             case StoreType.Collection:
-                return <NodeCollectionView key={nodeStore.Id} store={nodeStore as NodeCollectionStore} />;
+                return <NodeCollectionView key={nodeStore.Id} store={nodeStore as NodeCollectionStore} mainStore={this.props.mainStore}/>;
             default:
                 return null; 
         }
@@ -106,22 +110,30 @@ export class NodeCollectionView extends React.Component<NodeCollectionProps> {
      */
 
     public render() {
-        let store = this.props.store;
+        let {store, mainStore} = this.props;
 
         return (
-            <div className="node collectionNode" onMouseDown={this.pointerDown} // enables panning in nested collections
-             style={{
-                    transform: store.transform,
-                    width: `${store.width}px`,
-                    height: `${store.height}px`}}>
-                <TopBar store={store}/>
-                <div className="scroll-box">
-                    <div className="content">
-                        <h3 className="collection-title">{store.title}</h3>
-                        {store.nodes.map(this.renderNode)} {/** adds child nodes to the collection node */}
-                    </div> 
+            <div className="node-container" style={{
+                transform: store.transform,
+                position: 'absolute',
+                width: `${store.width}px`,
+                height: `${store.height + 10}px`}}
+            >
+                <div className="node collectionNode" onMouseDown={this.pointerDown} // enables panning in nested collections
+                style={{
+                    width: '100%',
+                    height: '100%'
+                }}>
+                    <TopBar store={store}/>
+                    <div className="scroll-box">
+                        <div className="content">
+                            <h3 className="collection-title">{store.title}</h3>
+                            {store.nodes.map(this.renderNode)} {/** adds child nodes to the collection node */}
+                        </div> 
+                    </div>
+                    <ResizeBox store={store}/>
                 </div>
-                <ResizeBox store={store}/>
+                <ConnectionWindow store={store} mainStore={mainStore}/>
             </div>
         );
     }

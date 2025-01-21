@@ -12,7 +12,7 @@ import { TextNodeView, VideoNodeView} from "../nodes";
 import "./FreeFormCanvas.scss";
 
 interface FreeFormProps {
-    store: NodeCollectionStore
+    store: NodeCollectionStore // mainCollectionStore
 }
 
 /**
@@ -68,13 +68,15 @@ export class FreeFormCanvas extends React.Component<FreeFormProps> {
         this.props.store.y += e.movementY;
     }
 
+
     /**
-     * Renders the canvas and alls the nodes that populate it (i.e. its "children")
+     * Renders the canvas and all the nodes that populate it (i.e. its "children")
      * @returns a freeform canvas HTML div element 
      */
 
     public render() {
-        let store = this.props.store;
+        const store = this.props.store;
+
         return (
             <div className="freeformcanvas-container" onPointerDown={this.onPointerDown}
 >
@@ -84,24 +86,24 @@ export class FreeFormCanvas extends React.Component<FreeFormProps> {
                         store.nodes.map(nodeStore => {
                             switch (nodeStore.type) {
                                 case StoreType.Text:
-                                    return (<TextNodeView key={nodeStore.Id} store={nodeStore as StaticTextNodeStore}/>)
+                                    return (<TextNodeView key={nodeStore.Id} store={nodeStore as StaticTextNodeStore} mainStore={store}/>)
 
                                 case StoreType.Video:
-                                    return (<VideoNodeView key={nodeStore.Id} store={nodeStore as VideoNodeStore}/>)
+                                    return (<VideoNodeView key={nodeStore.Id} store={nodeStore as VideoNodeStore} mainStore={store}/>)
 
                                 // same format followed below for each new node type created (Formattable Text, Image, Web)
 
                                 case StoreType.FormattableText:
-                                    return (<FormattableTextNodeView key={nodeStore.Id} store={nodeStore as FormattableTextNodeStore}/>);
+                                    return (<FormattableTextNodeView key={nodeStore.Id} store={nodeStore as FormattableTextNodeStore} mainStore={store}/>);
 
                                 case StoreType.Image:
-                                    return (<ImageNodeView key={nodeStore.Id} store={nodeStore as ImageNodeStore}/>)
+                                    return (<ImageNodeView key={nodeStore.Id} store={nodeStore as ImageNodeStore} mainStore={store}/>)
 
                                 case StoreType.Web:
-                                    return (<WebNodeView key={nodeStore.Id} store={nodeStore as WebNodeStore}/>)
+                                    return (<WebNodeView key={nodeStore.Id} store={nodeStore as WebNodeStore} mainStore={store}/>)
                                 
                                 case StoreType.Collection:
-                                    return (<NodeCollectionView key={nodeStore.Id} store={nodeStore as NodeCollectionStore}/>)
+                                    return (<NodeCollectionView key={nodeStore.Id} store={nodeStore as NodeCollectionStore} mainStore={store}/>)
 
                                 default:
                                     return (null);
