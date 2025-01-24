@@ -14,7 +14,7 @@ import { action } from "mobx";
 import { nodeService } from "../../NodeService";
 
 interface FreeFormProps {
-    store: NodeCollectionStore // mainCollectionStore
+    store: NodeCollectionStore // i.e. mainCollectionStore
 }
 
 /**
@@ -25,8 +25,9 @@ export class FreeFormCanvas extends React.Component<FreeFormProps> {
     private isPointerDown: boolean | undefined;
 
     /**
-     * Handles pointer down events on the main freeform canvas 
+     * Method for when the pointer is down on the main freeform canvas (i.e. start of the click and drag)
      * @param e -- the pointer event triggered when mouse is pressed down on the canvas
+     * -- already implemented
      */
 
     private onPointerDown = (e: React.PointerEvent): void => {
@@ -42,9 +43,10 @@ export class FreeFormCanvas extends React.Component<FreeFormProps> {
     }
 
     /**
-     * Handles pointer up events on the main freeform canvas 
+     * Method for when the pointer is up on the main freeform canvas 
      * @param e -- the pointer event triggered when mouse click is released
-     */
+     *  -- already implemented
+     */ 
 
     private onPointerUp = (e: PointerEvent): void => {
         e.stopPropagation();
@@ -55,8 +57,8 @@ export class FreeFormCanvas extends React.Component<FreeFormProps> {
     }
 
     /**
-     * Handles pointer movement events on the main freeform canvas, 
-     * allowing dragging the canvas (panning ability)
+     * Method for pointer movement on the main freeform canvas, 
+     * allowing dragging the canvas (panning ability) -- already implemented
      * @param e -- the pointer event triggered when the clicked mouse is moved
      * @returns -- returns if pointer is not down
      */
@@ -70,6 +72,11 @@ export class FreeFormCanvas extends React.Component<FreeFormProps> {
         this.props.store.y += e.movementY;
     }
 
+    /**
+     * Method to center a node in the user's view (i.e. "pan" the canvas so that node is in the view)
+     * @param nodeId -- the id of the node to center
+     */
+
     @action onCenterNode = (nodeId: string) => {
         const node = nodeService.findNodeById(nodeId);
         let x = 0;
@@ -77,6 +84,11 @@ export class FreeFormCanvas extends React.Component<FreeFormProps> {
  
         if (node) {
             const nodeParent = nodeService.getTopMostParent(node);
+            // represents top most collection node in which the node to center is inside,
+            // not including the freeform canvas
+
+            // if a top most parent exists, recursively center down the parental path
+            // via centerOnNode, othewise just center the node directly via the freeform canvas
             if (nodeParent) { 
                 x = nodeParent.x
                 y = nodeParent.y
@@ -86,7 +98,7 @@ export class FreeFormCanvas extends React.Component<FreeFormProps> {
                 y = node.y
             }
 
-            // Center the canvas around the node
+            // center the canvas around the node
             this.props.store.x = window.innerWidth / 2 - node.width / 2 - x;
             this.props.store.y = window.innerHeight / 2 - node.height / 2 - y;
         }

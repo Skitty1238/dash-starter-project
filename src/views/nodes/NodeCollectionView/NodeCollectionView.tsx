@@ -32,10 +32,11 @@ interface NodeCollectionProps {
 export class NodeCollectionView extends React.Component<NodeCollectionProps> {
 
     private isPointerDown = false;
+    // represents whether or not pointer is down on the node (for internal panning)
 
-    // represent initial position of pointer
     private initialX = 0; 
     private initialY = 0;
+    // represent initial position of pointer
 
     /**
      * Method handling mouse clicks (pointer down) on the interior of a Collection Node
@@ -76,6 +77,10 @@ export class NodeCollectionView extends React.Component<NodeCollectionProps> {
 
             elt.style.transform = "translate(" + this.props.store.x + "px, " + this.props.store.y + "px)";
         }
+
+        /**
+         * For when mouse is up (click is released)
+         */
 
         const mouseUp = () => {
             document.removeEventListener("mousemove", pointerMove);

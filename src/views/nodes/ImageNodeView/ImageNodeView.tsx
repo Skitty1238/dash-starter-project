@@ -38,7 +38,7 @@ export class ImageNodeView extends React.Component<ImageNodeProps> {
                 transform: store.transform,
                 position: 'absolute',
                 width: `${store.width}px`,
-                height: `${store.height + 10}px` // adjusted height to accommodate connection window
+                height: `${store.height + 10}px` 
             }}
             >
                 

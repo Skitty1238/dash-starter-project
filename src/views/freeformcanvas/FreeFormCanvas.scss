@@ -7,7 +7,7 @@
     overflow: auto; // allows scrolling
     background-size: 25px 25px;
     background-color: rgb(248, 245, 241);
-    background-image: radial-gradient(circle, rgb(189, 174, 143) 1px, transparent 1px); // Creates dots
+    background-image: radial-gradient(circle, rgb(189, 174, 143) 1px, transparent 1px); //  dotted canvas
 
     .freeformcanvas {
         position: absolute;

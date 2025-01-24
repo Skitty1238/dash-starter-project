@@ -42,15 +42,26 @@ export class NodeStore {
 
     @observable 
     public parent: NodeCollectionStore | null = null;
-    // represents the collection under which the node lies
+    // represents the collection node under which the node lies
 
     @observable public connections: NodeStore[] = [];
+    // represents the other nodes that the node is connected (linked) to
+
+    /**
+     * Method to add a connection (i.e. link a node)
+     * @param node -- the node to link
+     */
 
     @action addConnection(node: NodeStore) { 
         if (!this.connections.includes(node)) {
             this.connections.push(node);
         }
     }
+
+    /**
+     * Method to remove a connection
+     * @param removeNode -- the node for which to remove the connection from the current node
+     */
 
     @action removeConnection(removeNode: NodeStore) {
         this.connections = this.connections.filter(n => n.Id !== removeNode.Id);

@@ -138,7 +138,7 @@ class NodeModal extends React.Component<NodeModalProps> {
                             </select>
                         </label>
 
-                        <label> {/* Title field -- appears for any node type selected (all nodes must have titles) */}
+                        <label> {/* Title field -- appears for any node type selected (since all nodes can have titles) */}
                             Title:
                             <input type="text" value={this.title} onChange={e => this.changeTitle(e.target.value)} />
                         </label>

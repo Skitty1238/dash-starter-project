@@ -14,7 +14,7 @@ import { action } from 'mobx';
 
 interface FormattableTextNodeProps {
     store: FormattableTextNodeStore;
-    onCenterNode: (nodeId: string) => void;
+    onCenterNode: (nodeId: string) => void; // method to center the node on the screen
 }
 
 /**
@@ -92,7 +92,7 @@ export class FormattableTextNodeView extends React.Component<FormattableTextNode
                 transform: store.transform,
                 position: 'absolute',
                 width: `${store.width}px`,
-                height: `${store.height + 10}px`}}>
+                height: `${store.height + 10}px`}}> {/** adjusted height to accommodate connection window */} 
 
                 <div className="node formattableTextNode" style={{ 
                     width: '100%',

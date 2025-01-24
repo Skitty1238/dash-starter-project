@@ -76,10 +76,10 @@ export class App extends React.Component {
     public render() {
         return (
             <div className="App" id="canvas">
-            <FreeFormCanvas store={mainNodeCollection}/> 
-            <Sidebar store={mainNodeCollection} onMoveNode={this.onMoveNode}/>
-            <button className="add-node-button" onClick={this.addButtonClick}>+</button>
-                {<NodeModal store={mainNodeCollection}/>}
+            <FreeFormCanvas store={mainNodeCollection}/> {/** the main canvas */}
+            <Sidebar store={mainNodeCollection} onMoveNode={this.onMoveNode}/> {/** the sidebar (node hierarchy view) */}
+            <button className="add-node-button" onClick={this.addButtonClick}>+</button> {/** add node button */}
+                {<NodeModal store={mainNodeCollection}/>} {/** add node form (modal) */}
             </div>
         );
     }
