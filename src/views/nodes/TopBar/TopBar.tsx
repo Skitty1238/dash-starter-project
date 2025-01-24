@@ -3,6 +3,7 @@ import * as React from 'react';
 import { NodeStore, StoreType } from "../../../stores";
 import { DeleteButton } from '../DeleteButton';
 import "./TopBar.scss";
+import { action } from "mobx";
 
 interface TopBarProps {
     store: NodeStore;
@@ -93,6 +94,9 @@ export class TopBar extends React.Component<TopBarProps> {
         style={{ backgroundColor }}
         onPointerDown={this.onPointerDown}>
           <DeleteButton store={store} />
+          <button id="fav-button" onClick={store.toggleStar} > {/** button to "favorite" a start -- i.e. save it in favorites bar */}
+          {store.isStarred ? "★" : "☆"}
+          </button>
         </div>
         
     }

@@ -128,12 +128,14 @@ export const Sidebar: React.FC<SidebarProps> = observer(({ store, onMoveNode }) 
             const childrenCount = isCollection ? (node as NodeCollectionStore).nodes.length : 0; 
             // Counts children only for collection nodes (since other types of nodes cannot have children, so their count is 0)
             return (
+                <div>
                 <NodeItem 
                     key={`${node.Id}-${childrenCount}`} 
                     node={node} 
                     level={level} 
                     onMoveNode={onMoveNode} 
                 />
+                </div>
             );
         });
     };

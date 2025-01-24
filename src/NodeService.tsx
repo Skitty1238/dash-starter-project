@@ -100,6 +100,15 @@ export class NodeService {
         return path;
     }
 
+    /**
+     * Method that returns an array of all starred nodes in the app
+     * @returns -- an array of all starred nodes in the app
+     */
+
+    public starredNodes(): NodeStore[] {
+        return Array.from(this.nodes.values()).filter(node => node.isStarred);
+
+    }
 }
 
 export const nodeService = new NodeService();

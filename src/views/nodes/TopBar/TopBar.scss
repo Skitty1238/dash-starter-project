@@ -1,5 +1,13 @@
 .topbar {
-    background: #232323;
     height: 20px;
     cursor: pointer;
+}
+
+#fav-button {
+    position: absolute;
+    left: 20px;
+    top: 1.5px;
+    border: none;
+    background-color: #f8f5f156;
+    font-size: 11px;
 }

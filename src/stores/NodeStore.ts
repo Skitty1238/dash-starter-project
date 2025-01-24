@@ -70,4 +70,14 @@ export class NodeStore {
     @observable public areConnectionsVisible: boolean = false;
     // represents whether or not node's connection window is open
 
+    @observable isStarred = false;
+    // represents whether a node is starred (favorited) or not
+
+    /**
+     * Method to toggle the isStarred property
+     */
+    @action toggleStar = () => {
+        this.isStarred = !this.isStarred;
+    }
+
 }

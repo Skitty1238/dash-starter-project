@@ -12,6 +12,7 @@ import { TextNodeView, VideoNodeView} from "../nodes";
 import "./FreeFormCanvas.scss";
 import { action } from "mobx";
 import { nodeService } from "../../NodeService";
+import { Favorites } from "../../Favorites";
 
 interface FreeFormProps {
     store: NodeCollectionStore // i.e. mainCollectionStore
@@ -114,8 +115,9 @@ export class FreeFormCanvas extends React.Component<FreeFormProps> {
         const store = this.props.store;
 
         return (
-            <div className="freeformcanvas-container" onPointerDown={this.onPointerDown}
->
+            
+            <div className="freeformcanvas-container" onPointerDown={this.onPointerDown}> 
+            <Favorites store={store} onCenterNode={this.onCenterNode}/> {/** Panel of favorite nodes */}
                 <div className="freeformcanvas" style={{ transform: store.transform }}>
                     {   
                         // maps each item in the store to be rendered in the canvas based on the node type

@@ -57,6 +57,7 @@ export class ImageNodeView extends React.Component<ImageNodeProps> {
                 </div>
                 <button className="image-connections-button" onClick={this.toggleConnections}>+</button>
                 <ConnectionWindow store={store} onCenterNode={this.props.onCenterNode}/>
+                
             </div>
         );
     }
