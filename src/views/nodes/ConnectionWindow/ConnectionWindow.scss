@@ -4,7 +4,40 @@
     top: 0;
     background-color: white;
     padding: 5px;
-    width: 150px; // Adjust size as needed
-    transform: translateX(-100%); // Position to the right of the node
-    overflow: hidden;
+    width: 150px;
+    transform: translateX(-100%);
+    overflow-y: auto;
+}
+
+.connection-buttons {
+
+    button {
+        color: #171614;
+        border: none;
+        cursor: pointer;
+        margin: 1px;
+        border-radius: 2px;
+        background-color: #f8f5f1;
+
+        &:hover {
+            background-color: #ffffff66;
+        }
+    }
+    
+}
+
+.connect-drag-button {
+    color: #171614;
+    border: solid black 1px;
+    cursor: pointer;
+    margin: 2px;
+    position: absolute;
+    left: 20px;
+    border-radius: 2px;
+    
+}
+
+.connection-list {
+    list-style-type: none;
+    margin-left: -22px;
 }

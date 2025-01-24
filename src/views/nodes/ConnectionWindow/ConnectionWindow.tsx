@@ -1,14 +1,13 @@
-// ConnectionPoint.tsx
 import React from 'react';
 import { observer } from "mobx-react";
-import { NodeCollectionStore, NodeStore, StoreType } from '../../../stores';
-import { ImageNodeStore } from '../../../stores/ImageNodeStore';
+import { NodeStore, StoreType } from '../../../stores';
 import "./ConnectionWindow.scss"
 import { action } from 'mobx';
+import { nodeService } from '../../../NodeService';
 
 interface ConnectionWindowProps {
     store: NodeStore;
-    mainStore: NodeCollectionStore;
+    onCenterNode: (nodeId: string) => void;
 }
 
 /**
@@ -29,7 +28,7 @@ const getColorForNodeType = (type: StoreType | null | undefined) => {
       case StoreType.FormattableText:
         return "#aa6f7759";
       case StoreType.Collection:
-        return "#17161459"; 
+        return "#8f8c8ccc"; 
       default:
         return '#ccc';
     }
@@ -38,6 +37,7 @@ const getColorForNodeType = (type: StoreType | null | undefined) => {
 @observer
 export class ConnectionWindow extends React.Component<ConnectionWindowProps> {
     @action dragStart = (e: React.DragEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
         e.dataTransfer.setData("text/plain", this.props.store.Id);
         e.dataTransfer.effectAllowed = "move";
     }
@@ -45,17 +45,28 @@ export class ConnectionWindow extends React.Component<ConnectionWindowProps> {
     @action drop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         const sourceId = e.dataTransfer.getData("text/plain");
-        const targetStore = this.props.store;
-        const sourceStore = this.props.mainStore.findNodeById(sourceId);
+        const targetId = this.props.store.Id;
 
-        if (sourceStore && targetStore !== sourceStore) {
-            targetStore.addConnection(sourceStore);
-            sourceStore.addConnection(targetStore);
-        }
+        nodeService.connectNodes(sourceId, targetId);
+
     }
 
     @action allowDrop = (e: React.DragEvent) => {
         e.preventDefault();
+    }
+
+    @action nodeClick = (nodeId: string) => {
+      // Call the function to center the node when a button is clicked
+      if (this.props.onCenterNode) { // REMOVE THIS IF STATEMENT LATER!
+        this.props.onCenterNode(nodeId);
+      }
+    }
+
+    @action deleteConnection = (target: NodeStore) => {
+      const sourceId = this.props.store.Id;
+      const targetId = target.Id;
+      nodeService.disconnectNodes(sourceId, targetId);
+      this.props.store.removeConnection(target);
     }
 
     render() {
@@ -63,19 +74,31 @@ export class ConnectionWindow extends React.Component<ConnectionWindowProps> {
         if (!store.areConnectionsVisible) return null;
 
         const backgroundColor = getColorForNodeType(store.type);
+        const backgroundSolidColor = backgroundColor.slice(0,7);
         return (
             <div className="connection-window"
                  onDrop={this.drop} 
                  onDragOver={this.allowDrop}
                  style={{ position: 'absolute', right: '100%', top: 0, backgroundColor: backgroundColor, height: store.height}}>
-                <ul>
+                <ul className="connection-list">
                     {store.connections.map(node => (
                         <li key={node.Id}>
-                            {node.title || "Untitled Node"}
+                          <div className="connection-buttons">
+                            <button onClick={() => this.nodeClick(node.Id)}>
+                              {node.title || "Untitled Node"}
+                            </button>
+                            <button 
+                              onClick={() => this.deleteConnection(node)}>
+                                &times;
+                            </button>
+                          </div>
                         </li>
                     ))}
                 </ul>
-                <button draggable onDragStart={this.dragStart}>Drag to connect</button>
+                <button className="connect-drag-button" draggable onDragStart={this.dragStart}
+                style={{backgroundColor: backgroundSolidColor}}>
+                  Drag & Connect !
+                </button>
             </div>
         );
     }

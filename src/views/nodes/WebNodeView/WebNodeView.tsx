@@ -4,13 +4,13 @@ import { WebNodeStore } from "../../../stores/WebNodeStore";
 import { TopBar } from "../TopBar";
 import { ResizeBox } from '../ResizeBox/ResizeBox';
 import "./WebNodeView.scss";
-import { NodeCollectionStore } from '../../../stores';
 import { ConnectionWindow } from '../ConnectionWindow';
+import { action } from 'mobx';
 
 
 interface WebNodeProps {
     store: WebNodeStore;
-    mainStore: NodeCollectionStore;
+    onCenterNode: (nodeId: string) => void;
 }
 
 /**
@@ -43,12 +43,19 @@ export class WebNodeView extends React.Component<WebNodeProps> {
     }
 
     /**
+     * toggles the areConnectionsVisible field of the node (used to show/hide the connections window)
+     */
+    @action toggleConnections = () => {
+        this.props.store.areConnectionsVisible = !this.props.store.areConnectionsVisible
+    }
+
+    /**
      * Renders the Web Node
      * @returns -- HTML div element representing a Web Node
      */
 
     public render() {
-        let { store, mainStore } = this.props;
+        let { store } = this.props;
 
         return (
             <div className="node-container" style={{
@@ -80,7 +87,8 @@ export class WebNodeView extends React.Component<WebNodeProps> {
                     </div>
                     <ResizeBox store={store}/>
                 </div>
-                <ConnectionWindow store={store} mainStore={mainStore}/>
+                <button className="web-connections-button" onClick={this.toggleConnections}>+</button>
+                <ConnectionWindow store={store} onCenterNode={this.props.onCenterNode}/>
             </div>
         );
     }

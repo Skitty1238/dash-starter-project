@@ -9,12 +9,12 @@ import { FormattableTextNodeStore } from "../../../stores/FormattableTextNodeSto
 import { TopBar } from "../TopBar";
 import { ResizeBox } from '../ResizeBox/ResizeBox'; // for resizing node functionality
 import "./FormattableTextNodeView.scss";
-import { NodeCollectionStore } from '../../../stores';
 import { ConnectionWindow } from '../ConnectionWindow';
+import { action } from 'mobx';
 
 interface FormattableTextNodeProps {
     store: FormattableTextNodeStore;
-    mainStore: NodeCollectionStore;
+    onCenterNode: (nodeId: string) => void;
 }
 
 /**
@@ -55,11 +55,18 @@ export class FormattableTextNodeView extends React.Component<FormattableTextNode
     }
 
     /**
+     * toggles the areConnectionsVisible field of the node (used to show/hide the connections window)
+     */
+    @action toggleConnections = () => {
+        this.props.store.areConnectionsVisible = !this.props.store.areConnectionsVisible
+    }
+
+    /**
      * Renders the Formattable Text Node. Uses React-Quill
      * @returns -- an HTML div element representing the Formattable Text Node
      */
     public render() {
-        let { store, mainStore } = this.props;
+        let { store } = this.props;
 
         // customize functionality of the text editor
         // the "header" functionality is intended to be equivalent to a title
@@ -103,7 +110,8 @@ export class FormattableTextNodeView extends React.Component<FormattableTextNode
                     </div>
                     <ResizeBox store={store}/> {/* box for resizing functionality (click and drag to resize) */}
                 </div>
-                <ConnectionWindow store={store} mainStore={mainStore}/>
+                <button className="formattable-connections-button" onClick={this.toggleConnections}>+</button>
+                <ConnectionWindow store={store} onCenterNode={this.props.onCenterNode}/>
             </div>
         );
     }

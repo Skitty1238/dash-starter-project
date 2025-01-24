@@ -1,5 +1,6 @@
 import { computed, observable, action } from "mobx";
-import { NodeStore, StoreType } from "./NodeStore";
+import { NodeStore } from "./NodeStore";
+import { nodeService } from "../NodeService";
 
 
 export class NodeCollectionStore extends NodeStore {
@@ -22,7 +23,8 @@ export class NodeCollectionStore extends NodeStore {
         stores.forEach(store => {
             if (!this.nodes.includes(store)) {
                 store.parent = this;
-                this.nodes.push(store);}
+                this.nodes.push(store)
+                nodeService.addNode(store);}
         })
     }
 
@@ -33,24 +35,54 @@ export class NodeCollectionStore extends NodeStore {
         node.parent = null;
     }
 
-    // breadth first search to return a partciular node (within collections) given its id
-    @observable
-    public findNodeById(id: string): NodeStore | undefined {
-        let queue: (NodeStore | undefined)[] = [this];
-        while (queue.length > 0) {
-            const current = queue.shift();
-            if (current?.Id === id) {
-                return current;
-            }
-            if (current && 'nodes' in current) {
-                queue.push(...(current as NodeCollectionStore).nodes);
-            }
-        }
-        return undefined;
-    }
+    // // breadth first search to return a partciular node (within collections) given its id
+    // @observable
+    // public findNodeById(id: string): NodeStore | undefined {
+    //     let queue: (NodeStore | undefined)[] = [this];
+    //     while (queue.length > 0) {
+    //         const current = queue.shift();
+    //         if (current?.Id === id) {
+    //             return current;
+    //         }
+    //         if (current && 'nodes' in current) {
+    //             queue.push(...(current as NodeCollectionStore).nodes);
+    //         }
+    //     }
+    //     return undefined;
+    // }
 
     @observable
     public isModalOpen = false;
+
+    @action
+    public centerOnNode = (nodeId: string) => {
+        const nodePath = nodeService.getParentalPath(nodeId);
+        console.log(nodeService.getParentalPath(nodeId));
+        if (nodePath.length > 0) {
+            // Reverse the path to start centering from the outermost parent
+            nodePath.reverse().forEach((node, index) => {
+                if (index < nodePath.length - 1) { // Ensure there is a parent to center within
+                    const parentNode = nodePath[index + 1];
+                    this.centerNodeInParent(node, parentNode);
+                }
+            });
+        }
+    }
+
+    @action
+    private centerNodeInParent = (node: NodeStore, parent: NodeStore) => {
+        if (parent instanceof NodeCollectionStore) {
+            // Calculate the offset needed to center this node in the parent
+            const offsetX = (parent.width / 2) - (node.x + node.width / 2);
+            const offsetY = (parent.height / 2) - (node.y + node.height / 2);
+
+            // Adjust all nodes within the parent
+            parent.nodes.forEach(child => {
+                child.x += offsetX;
+                child.y += offsetY;
+            });
+        }
+    }
 
 
 }

@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.scss';
-import { NodeCollectionStore, NodeStore, StaticTextNodeStore, StoreType, VideoNodeStore } from './stores';
-import { FormattableTextNodeStore } from "./stores/FormattableTextNodeStore";
-import { ImageNodeStore } from "./stores/ImageNodeStore";
-import { WebNodeStore } from "./stores/WebNodeStore";
+import { NodeCollectionStore } from './stores';
 import { FreeFormCanvas } from './views/freeformcanvas/FreeFormCanvas';
 import 'react-quill/dist/quill.snow.css';
 import { Sidebar } from "./Sidebar";
 import NodeModal from './NodeModal';
+import { nodeService } from './NodeService';
 
 const mainNodeCollection = new NodeCollectionStore({}); // represents the main canvas
 
@@ -33,8 +31,8 @@ export class App extends React.Component {
     private onMoveNode = (nodeId: string, newParentId?: string) => {
 
         // find current node and its parent
-        const nodeToMove = mainNodeCollection.findNodeById(nodeId);
-        const newParentNode = newParentId ? mainNodeCollection.findNodeById(newParentId) as NodeCollectionStore : mainNodeCollection;
+        const nodeToMove = nodeService.findNodeById(nodeId);
+        const newParentNode = newParentId ? nodeService.findNodeById(newParentId) as NodeCollectionStore : mainNodeCollection;
 
         if (nodeId === newParentId) {
             return; // prevent moving the node to itself (was exhibiting weird behaviour)

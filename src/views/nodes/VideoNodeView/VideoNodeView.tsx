@@ -1,15 +1,17 @@
 import { observer } from "mobx-react";
 import * as React from 'react';
-import { NodeCollectionStore, VideoNodeStore } from "../../../stores";
+import { VideoNodeStore } from "../../../stores";
 import "./../NodeView.scss";
 import { TopBar } from "./../TopBar";
 import { ResizeBox } from '../ResizeBox/ResizeBox';
 import "./VideoNodeView.scss";
 import { ConnectionWindow } from "../ConnectionWindow";
+import { action } from "mobx";
 
 interface VideoNodeProps {
     store: VideoNodeStore;
-    mainStore: NodeCollectionStore;
+    onCenterNode: (nodeId: string) => void;
+    
 }
 
 /**
@@ -18,6 +20,13 @@ interface VideoNodeProps {
 
 @observer
 export class VideoNodeView extends React.Component<VideoNodeProps> {
+
+    /**
+     * toggles the areConnectionsVisible field of the node (used to show/hide the connections window)
+     */
+    @action toggleConnections = () => {
+        this.props.store.areConnectionsVisible = !this.props.store.areConnectionsVisible
+    }
     
     /**
      * Renders a Video Node
@@ -25,7 +34,7 @@ export class VideoNodeView extends React.Component<VideoNodeProps> {
      */
 
     render() {
-        let {store, mainStore} = this.props;
+        let {store} = this.props;
 
         return (
             <div className="node-container" style={{
@@ -46,7 +55,8 @@ export class VideoNodeView extends React.Component<VideoNodeProps> {
                     </div>
                     <ResizeBox store={store}/>
                 </div>
-                <ConnectionWindow store={store} mainStore={mainStore}/>
+                <button className="video-connections-button" onClick={this.toggleConnections}>+</button>
+                <ConnectionWindow store={store} onCenterNode={this.props.onCenterNode}/>
             </div>
         );
     }

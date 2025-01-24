@@ -1,17 +1,18 @@
 import { observer } from "mobx-react";
 import * as React from 'react';
 
-import { NodeCollectionStore, StaticTextNodeStore } from "../../../stores";
+import { StaticTextNodeStore } from "../../../stores";
 import { TopBar } from "../TopBar";
 import { ResizeBox } from '../ResizeBox/ResizeBox';
 import "./../NodeView.scss";
 import "./TextNodeView.scss";
 import { ConnectionWindow } from "../ConnectionWindow";
+import { action } from "mobx";
 
 
 interface TextNodeProps {
     store: StaticTextNodeStore;
-    mainStore: NodeCollectionStore;
+    onCenterNode: (nodeId: string) => void;
 }
 
 /**
@@ -22,12 +23,19 @@ interface TextNodeProps {
 export class TextNodeView extends React.Component<TextNodeProps> {
 
     /**
+     * toggles the areConnectionsVisible field of the node (used to show/hide the connections window)
+     */
+    @action toggleConnections = () => {
+        this.props.store.areConnectionsVisible = !this.props.store.areConnectionsVisible
+    }
+
+    /**
      * Renders the frontend of the Text Node
      * @returns -- HTML div elemetn representing the Static Text Node
      */
 
     public render() {
-        let {store, mainStore} = this.props;
+        let {store} = this.props;
 
         return (
             <div className="node-container" style={{
@@ -51,7 +59,8 @@ export class TextNodeView extends React.Component<TextNodeProps> {
                         </div>
                         <ResizeBox store={store}/>
                     </div>
-                    <ConnectionWindow store={store} mainStore={mainStore}/>
+                    <button className="text-connections-button" onClick={this.toggleConnections}>+</button>
+                    <ConnectionWindow store={store} onCenterNode={this.props.onCenterNode}/>
             </div>
         );
     }

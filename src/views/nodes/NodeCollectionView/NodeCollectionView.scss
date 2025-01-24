@@ -1,7 +1,7 @@
 .node {
 
     &.collectionNode {
-        background: rgba(0, 0, 0, 0.7); 
+        background: #303030cc; 
         // transparent effect to indicate this isn't really a "normal" node,
         // instead more like a new canvas
       
@@ -19,4 +19,14 @@
 
         }
     }
+}
+
+.collection-connections-button {
+    position: absolute;
+    left: 0;
+    top: 1px;
+    background: transparent;
+    color: white;
+    border: 0px;
+    cursor: pointer;
 }

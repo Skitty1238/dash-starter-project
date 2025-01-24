@@ -18,3 +18,13 @@
         // iframe should take up entire space available and have no border
     }
 }
+
+.web-connections-button {
+    position: absolute;
+    left: 0;
+    top: 1px;
+    background: transparent;
+    color: white;
+    border: 0px;
+    cursor: pointer;
+}

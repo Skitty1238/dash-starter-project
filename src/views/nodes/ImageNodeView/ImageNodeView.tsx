@@ -6,12 +6,11 @@ import { TopBar } from "./../TopBar";
 import { ResizeBox } from '../ResizeBox/ResizeBox';
 import "./ImageNodeView.scss";
 import { ConnectionWindow } from "../ConnectionWindow";
-import { NodeCollectionStore, NodeStore } from "../../../stores";
 import { action } from "mobx";
 
 interface ImageNodeProps {
     store: ImageNodeStore;
-    mainStore: NodeCollectionStore;
+    onCenterNode: (nodeId: string) => void;
 }
 
 /**
@@ -21,6 +20,9 @@ interface ImageNodeProps {
 @observer
 export class ImageNodeView extends React.Component<ImageNodeProps> {
 
+    /**
+     * toggles the areConnectionsVisible field of the node (used to show/hide the connections window)
+     */
     @action toggleConnections = () => {
         this.props.store.areConnectionsVisible = !this.props.store.areConnectionsVisible
     }
@@ -30,7 +32,7 @@ export class ImageNodeView extends React.Component<ImageNodeProps> {
      * @returns -- an HTML div element representing an Image Node
      */
     public render() {
-        const { store, mainStore } = this.props;
+        const { store } = this.props;
         return (
             <div className="node-container" style={{
                 transform: store.transform,
@@ -53,8 +55,8 @@ export class ImageNodeView extends React.Component<ImageNodeProps> {
                     </div>
                     <ResizeBox store={store}/>
                 </div>
-                <button className="connections-button" onClick={this.toggleConnections}>+</button>
-                <ConnectionWindow store={store} mainStore={mainStore}/>
+                <button className="image-connections-button" onClick={this.toggleConnections}>+</button>
+                <ConnectionWindow store={store} onCenterNode={this.props.onCenterNode}/>
             </div>
         );
     }

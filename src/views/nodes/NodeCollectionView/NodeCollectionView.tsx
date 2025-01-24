@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { observable } from "mobx";
+import { action } from "mobx";
 import * as React from 'react';
 import { NodeCollectionStore } from "../../../stores/NodeCollectionStore";
 import "./NodeCollectionView.scss";
@@ -16,11 +16,12 @@ import { TextNodeView, VideoNodeView} from "../../nodes";
 import { StaticTextNodeStore } from "../../../stores/StaticTextNodeStore";
 import { VideoNodeStore } from "../../../stores/VideoNodeStore";
 import { ConnectionWindow } from "../ConnectionWindow";
+import { nodeService } from "../../../NodeService";
 
 
 interface NodeCollectionProps {
     store: NodeCollectionStore;
-    mainStore: NodeCollectionStore;
+    onCenterNode: (nodeId: string) => void;
 }
 
 /**
@@ -29,6 +30,8 @@ interface NodeCollectionProps {
 
 @observer
 export class NodeCollectionView extends React.Component<NodeCollectionProps> {
+
+    private isPointerDown = false;
 
     // represent initial position of pointer
     private initialX = 0; 
@@ -40,6 +43,12 @@ export class NodeCollectionView extends React.Component<NodeCollectionProps> {
      * @param e -- the event of a mouse click within a Collection Node
      */
     private pointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+
+        if (e.target instanceof HTMLButtonElement || e.target instanceof HTMLInputElement) {
+            return; // prevents panning if mouse is on the "connections" button (which also needs to be dragged)
+        }
+
+        // if (e.target != e.currentTarget) {return}
         e.preventDefault(); 
         e.stopPropagation(); 
         // this prevents double-panning for collections within collections (nested collections)             
@@ -51,6 +60,7 @@ export class NodeCollectionView extends React.Component<NodeCollectionProps> {
 
         // when mouse is clicked and dragged
         const pointerMove = (move : MouseEvent) => {
+            
             let changeX = move.clientX - this.initialX;
             let changeY = move.clientY - this.initialY;
 
@@ -79,6 +89,13 @@ export class NodeCollectionView extends React.Component<NodeCollectionProps> {
     }
 
     /**
+     * toggles the areConnectionsVisible field of the node (used to show/hide the connections window)
+     */
+    @action toggleConnections = () => {
+        this.props.store.areConnectionsVisible = !this.props.store.areConnectionsVisible
+    }
+
+    /**
      * Renders the differrent types of nodes that may be within a collection node (i.e. its children)
      * @param nodeStore -- represents the type of node being rendered, in terms of its "store"
      * @returns -- a node of the relevant type (Text, Video, Formattable Text, Image, Web, or Collection)
@@ -88,17 +105,17 @@ export class NodeCollectionView extends React.Component<NodeCollectionProps> {
 
         switch (nodeStore.type) {
             case StoreType.Text:
-                return <TextNodeView key={nodeStore.Id} store={nodeStore as StaticTextNodeStore} mainStore={this.props.mainStore}/>;
+                return <TextNodeView key={nodeStore.Id} store={nodeStore as StaticTextNodeStore} onCenterNode={this.props.onCenterNode}/>;
             case StoreType.Video:
-                return <VideoNodeView key={nodeStore.Id} store={nodeStore as VideoNodeStore} mainStore={this.props.mainStore}/>;
+                return <VideoNodeView key={nodeStore.Id} store={nodeStore as VideoNodeStore} onCenterNode={this.props.onCenterNode}/>;
             case StoreType.FormattableText:
-                return <FormattableTextNodeView key={nodeStore.Id} store={nodeStore as FormattableTextNodeStore} mainStore={this.props.mainStore}/>;
+                return <FormattableTextNodeView key={nodeStore.Id} store={nodeStore as FormattableTextNodeStore} onCenterNode={this.props.onCenterNode}/>;
             case StoreType.Image:
-                return <ImageNodeView key={nodeStore.Id} store={nodeStore as ImageNodeStore} mainStore={this.props.mainStore} />;
+                return <ImageNodeView key={nodeStore.Id} store={nodeStore as ImageNodeStore} onCenterNode={this.props.onCenterNode}/>;
             case StoreType.Web:
-                return <WebNodeView key={nodeStore.Id} store={nodeStore as WebNodeStore} mainStore={this.props.mainStore}/>;
+                return <WebNodeView key={nodeStore.Id} store={nodeStore as WebNodeStore} onCenterNode={this.props.onCenterNode}/>;
             case StoreType.Collection:
-                return <NodeCollectionView key={nodeStore.Id} store={nodeStore as NodeCollectionStore} mainStore={this.props.mainStore}/>;
+                return <NodeCollectionView key={nodeStore.Id} store={nodeStore as NodeCollectionStore} onCenterNode={this.props.onCenterNode}/>;
             default:
                 return null; 
         }
@@ -110,19 +127,15 @@ export class NodeCollectionView extends React.Component<NodeCollectionProps> {
      */
 
     public render() {
-        let {store, mainStore} = this.props;
+        let {store} = this.props;
 
         return (
-            <div className="node-container" style={{
-                transform: store.transform,
-                position: 'absolute',
-                width: `${store.width}px`,
-                height: `${store.height + 10}px`}}
-            >
+            <div>
                 <div className="node collectionNode" onMouseDown={this.pointerDown} // enables panning in nested collections
                 style={{
-                    width: '100%',
-                    height: '100%'
+                    transform: store.transform,
+                    width: `${store.width}px`,
+                    height: `${store.height + 10}px`
                 }}>
                     <TopBar store={store}/>
                     <div className="scroll-box">
@@ -133,7 +146,12 @@ export class NodeCollectionView extends React.Component<NodeCollectionProps> {
                     </div>
                     <ResizeBox store={store}/>
                 </div>
-                <ConnectionWindow store={store} mainStore={mainStore}/>
+                <button className="collection-connections-button" onClick={this.toggleConnections} 
+                style={{transform: store.transform, position: "relative", top: 0}}>+</button>
+
+                <div style={{transform: store.transform, top: "-20px", position: "relative"}}>
+                    <ConnectionWindow store={store} onCenterNode={this.props.onCenterNode}/>
+                </div>
             </div>
         );
     }

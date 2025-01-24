@@ -2,6 +2,7 @@ import { observer } from "mobx-react";
 import * as React from 'react';
 import { NodeStore } from "../../../stores";
 import "./DeleteButton.scss"
+import { nodeService } from "../../../NodeService";
 
 interface DeleteButtonProps {
     store: NodeStore;
@@ -22,6 +23,11 @@ export class DeleteButton extends React.Component<DeleteButtonProps> {
     private delete = () => {
         const { store } = this.props;
         if (store.parent) {
+            store.connections.forEach(
+                connection => nodeService.disconnectNodes(store.Id, connection.Id)) 
+                // so that the nodes that are connected to the node being removed
+                // are no longer connected
+             
             store.parent.removeNode(store);
         }
     };
