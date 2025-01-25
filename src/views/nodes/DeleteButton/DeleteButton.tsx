@@ -30,6 +30,7 @@ export class DeleteButton extends React.Component<DeleteButtonProps> {
              
             store.parent.removeNode(store);
         }
+        nodeService.removeNode(store.Id);
     };
 
     /**

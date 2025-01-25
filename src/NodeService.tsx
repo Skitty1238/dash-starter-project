@@ -1,5 +1,5 @@
 import { NodeCollectionStore, NodeStore } from "./stores";
-import { observable, action } from "mobx";
+import { observable, action, computed } from "mobx";
 
 /**
  * Class to handle interactions between nodes (and any necessary functions nodes may need)
@@ -19,6 +19,39 @@ export class NodeService {
             this.nodes.set(node.Id, node);
         }
     }
+
+    /**
+     * Method to call a recursive node removal function, given a node id
+     * @param nodeId -- the id of the node to remove
+     */
+
+    @action removeNode(nodeId: string): void {
+        const node = this.nodes.get(nodeId);
+        if (node) {
+            this.recursiveRemoveNode(node);
+        }
+    }
+
+    /**
+     * Method to delete nodes, recursively if the node(s) are collection nodes
+     * -- i.e. to remove their children too
+     * @param node 
+     */
+
+    private recursiveRemoveNode(node: NodeStore): void {
+        // recursively remove children for collections
+        if (node instanceof NodeCollectionStore) {
+            node.nodes.slice().forEach(childNode => this.recursiveRemoveNode(childNode));
+        }
+
+        // remove connections
+        node.connections.forEach(connNode => {
+            connNode.removeConnection(node);
+        });
+
+        this.nodes.delete(node.Id); // remove from map
+    }
+
 
     /**
      * Method to find a node given its id
@@ -105,10 +138,11 @@ export class NodeService {
      * @returns -- an array of all starred nodes in the app
      */
 
-    public starredNodes(): NodeStore[] {
+    @computed get starredNodes(): NodeStore[] {
         return Array.from(this.nodes.values()).filter(node => node.isStarred);
 
     }
+
 }
 
 export const nodeService = new NodeService();
