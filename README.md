@@ -1,4 +1,4 @@
-# INSTRUCTIONS ON HOW TO USE THE APP:
+# Instructions on how to use the app:
 
 When you open the application, you will see a blank canvas, an empty sidebar (on the left hand side), an empty favorites bar (at the top right corner), and a add node button (+) on the bottom right.
 
