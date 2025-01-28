@@ -5,7 +5,7 @@
         .content {
             width: 100%;
             height: 100%;
-            // ensures the content takes up the max possible space in the node
+            // so the content takes up the max possible space in the node
 
             img {
                 width: 100%;
@@ -15,7 +15,7 @@
 
             // makes the width of the image equal to the width of the space within the node 
             // (to reasonably deal with very large or very small images)
-            // height is adjusted automatically to preserve aspect ratio of original image
+            // height is adjusted automatically to preserve aspect ratio of og image
 
             
         }

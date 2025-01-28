@@ -31,10 +31,10 @@
     cursor: pointer;
 
     &:hover {
-        background-color: rgb(248, 245, 241); // default hover for all non-collection nodes
+        background-color: rgb(248, 245, 241); // for all non-collection nodes
     }
 
     &.node-item-collection:hover {
-        background-color: #c7c2be73; // specific hover for collection nodes
+        background-color: #c7c2be73; // for collection nodes
     }
 }

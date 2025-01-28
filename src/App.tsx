@@ -23,7 +23,7 @@ export class App extends React.Component {
     }
 
     /**
-     * Method that handles moving nodes to/from/between collections (in the sidebar)
+     * Method that handles when nodes are moved to/from/between collections
      * @param nodeId -- the id of the node to move
      * @param newParentId -- the id of the new parent the node is being moved to
      * @returns -- if the node is somehow moved to itself (i.e. you try and move a collection to itself)
@@ -35,14 +35,12 @@ export class App extends React.Component {
         const newParentNode = newParentId ? nodeService.findNodeById(newParentId) as NodeCollectionStore : mainNodeCollection;
 
         if (nodeId === newParentId) {
-            return; // prevent moving the node to itself (was exhibiting weird behaviour)
+            return; // prevent moving the node to itself (wouldn't make sense)
         }
     
         if (nodeToMove && newParentNode && nodeToMove.parent !== newParentNode) { 
 
             // remove node from its current parent collection 
-            // (unless its parent is the main collection, in which case
-            // nodeToMove.parent is null)
             if (nodeToMove.parent) {
                 nodeToMove.parent.removeNode(nodeToMove);
             }

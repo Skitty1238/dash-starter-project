@@ -18,7 +18,6 @@ import React from 'react';
 import { observer } from "mobx-react";
 import './Sidebar.scss';
 import { NodeStore, NodeCollectionStore } from './stores';
-import { observable } from 'mobx';
 
 interface NodeItemProps {
     node: NodeStore;

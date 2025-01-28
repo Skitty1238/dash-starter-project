@@ -29,7 +29,7 @@ const getColorForNodeType = (type: StoreType | null | undefined) => {
       case StoreType.Collection:
         return "#171614"; 
       default:
-        return '#ccc';
+        return "#ffffff";
     }
   };
 
@@ -94,7 +94,7 @@ export class TopBar extends React.Component<TopBarProps> {
         style={{ backgroundColor }}
         onPointerDown={this.onPointerDown}>
           <DeleteButton store={store} />
-          <button id="fav-button" onClick={store.toggleStar} > {/** button to "favorite" a start -- i.e. save it in favorites bar */}
+          <button id="fav-button" onClick={store.toggleStar} > {/** button to "favorite" a node -- i.e. save it in favorites bar */}
           {store.isStarred ? "★" : "☆"}
           </button>
         </div>

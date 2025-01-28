@@ -2,6 +2,10 @@ import { computed, observable, action } from "mobx";
 import { NodeStore } from "./NodeStore";
 import { nodeService } from "../NodeService";
 
+/**
+ * A class for the information stored in a collection node
+ */
+
 
 export class NodeCollectionStore extends NodeStore {
 
@@ -17,8 +21,11 @@ export class NodeCollectionStore extends NodeStore {
     
     @observable
     public nodes: NodeStore[] = new Array<NodeStore>();
-    // array of nodes (childrren) within the collection
+    // array of nodes (children) within the collection
 
+    /**
+     * Method to transform the node
+     */
     @computed
     public get transform(): string {
         return "translate(" + this.x + "px," + this.y + "px)"; // for CSS transform property

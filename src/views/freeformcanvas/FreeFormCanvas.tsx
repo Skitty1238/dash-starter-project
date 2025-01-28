@@ -23,7 +23,7 @@ interface FreeFormProps {
  */
 @observer
 export class FreeFormCanvas extends React.Component<FreeFormProps> {
-    private isPointerDown: boolean | undefined;
+    private isPointerDown: boolean | undefined; // whether or not pointer is down (for panning)
 
     /**
      * Method for when the pointer is down on the main freeform canvas (i.e. start of the click and drag)

@@ -30,7 +30,7 @@ const getColorForNodeType = (type: StoreType | null | undefined) => {
       case StoreType.Collection:
         return "#8f8c8ccc"; 
       default:
-        return "#ccc";
+        return "#ffffff";
     }
   };
 
